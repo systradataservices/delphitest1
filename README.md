@@ -49,7 +49,9 @@ The column headings for the files are follows:
 For example, for one bus operator (A2B Bus and Coach Limited): 
 
 "A2B Bus and Coach Limited","127","1101110"
+
 "A2B Bus and Coach Limited","128","1111101"
+
 "A2B Bus and Coach Limited","E02","1111100"
 
 Here we can see that the bus operator "A2B Bus and Coach Limited" provides 3 services (numbers: 127, 128, E02) and each services operates on different days of the week (1101110, 1111101, 1111100).
