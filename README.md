@@ -4,17 +4,16 @@
 
 ### Purpose
 
-As it is difficult to fully assess somebody’s abilities at an interview, particularly their programming skills, we give a small programming exercise to all potential recruits. The problem is a fairly simple one, which should be completed in the applicant’s own time.
+As it is difficult to fully assess somebody’s abilities at an interview, particularly their programming skills, we give a small programming exercise to all potential candidates. The problem is a fairly simple one, which should be completed in the applicant’s own time.
 
-This is an opportunity for the candidate to show their engineering knowledge and craft work.  We are looking for engineering best practice. The test will be scored accordingly. 
+This is an opportunity for the candidate to show their engineering knowledge and craft work.  We are looking for engineering best practice. 
 
 This is a very important part of our hiring process. Therefore we recommend that candidates give this adequate consideration and address this task as they would do for any other professional assignments in their current workplace.
 
 ### Instructions 
 
 -   Use any version of Delphi to complete the exercise
--   We use GitHub to host these tests to create a modern practical engineering experience. Please complete this exercise and create a pull request containing your solution 
--   We recommend you create a development branch for your development and from this create a final pull request to the master branch for review
+-   We use GitHub to host these tests to create a modern practical engineering experience. Please complete this exercise and either fork the repository and submit a pull request for your solution or submit your complete solution as a single zip file via email
 -   We would much prefer that you submit a complete software implementation that demonstrates modern engineering best practices.  However we also appreciate that to provide a complete solution we may be expecting too much of the candidates time. If you are pressed for time, we recommend you use the pull request to comment on areas that, given more time, you would address or have done differently. 
 -   Please update the RUNME.MD file with instructions how to run your application 
 
