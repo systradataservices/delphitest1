@@ -14,7 +14,7 @@ This is a very important part of our hiring process. Therefore we recommend that
 
 -   Use any version of Delphi to complete the exercise
 -   We use GitHub to host these tests to create a modern practical engineering experience. Please complete this exercise and either fork the repository and submit a pull request for your solution or submit your complete solution as a single zip file via email
--   We would much prefer that you submit a complete software implementation that demonstrates modern engineering best practices.  However we also appreciate that to provide a complete solution we may be expecting too much of the candidates time. If you are pressed for time, we recommend you use the pull request to comment on areas that, given more time, you would address or have done differently. 
+-   We would much prefer that you submit a complete software implementation that demonstrates modern engineering best practices.  However we also appreciate that to provide a complete solution we may be expecting too much of the candidates time. If you are pressed for time, we recommend you use the pull request to comment on areas that, given more time, you would address or have done differently
 -   Please update the RUNME.MD file with instructions how to run your application 
 
 ## Exercise
