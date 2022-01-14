@@ -1,0 +1,1 @@
+Simple check that the repository is connected correctly.
