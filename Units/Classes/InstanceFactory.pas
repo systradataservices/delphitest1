@@ -27,7 +27,7 @@ type
     class destructor DestroyClass;
     procedure RegisterInterfaceClass(TheInterface: TGUID; TheClass: TRefCountedClass);
     procedure DeRegisterInterfaceClass(TheInterface: TGUID; TheClass: TRefCountedClass);
-    function CreateInstance(TheInterface: TGUID; out Obj): boolean;
+    function CreateInstance(TheInterface: TGUID; out Obj; Injected: IInterface = nil): boolean;
   end;
 
 implementation
@@ -40,7 +40,7 @@ begin
   fInterfaceHash := TDictionary<TGUID, TRefCountedClass>.Create;
 end;
 
-function TInstanceFactory.CreateInstance(TheInterface: TGUID; out obj): boolean;
+function TInstanceFactory.CreateInstance(TheInterface: TGUID; out obj; Injected: IInterface = nil): boolean;
 var
   TheClass: TRefCountedClass;
   TheInstance: TRefCounted;
@@ -52,7 +52,7 @@ begin
   TheClass := ImplementingClass(TheInterface);
   if TheClass <> nil then
     begin
-      TheInstance := TheClass.CreateRefCounted;
+      TheInstance := TheClass.CreateRefCounted(Injected);
       Result := TheInstance.GetInterface(TheInterface, obj);
     end;
 end;

@@ -21,8 +21,7 @@ type
     fModel: IBusServiceModel;
     fView : IView;
   protected
-    procedure DoInitialisation; override;
-    procedure RegisterView(View: IView);
+    procedure DoInitialisation(Injected: IInterface); override;
     function LoadDataFromCSVFile(FileName: string; Logger: IErrorLog): boolean;
     function DisplayDataByDaysOfWeekGrouping(Logger: IErrorLog): boolean;
   public
@@ -151,20 +150,16 @@ begin
     end;
 end;
 
-procedure TDataController.DoInitialisation;
+procedure TDataController.DoInitialisation(Injected: IInterface);
 begin
   inherited;
+  Injected.QueryInterface(IView, fView);
   InstanceFactory.TInstanceFactory.SingleInstance.CreateInstance(IBusServiceModel, fModel);
 end;
 
 function TDataController.LoadDataFromCSVFile(FileName: string; Logger: IErrorLog): boolean;
 begin
   Result := fModel.LoadDataFromCSVFile(FileName, Logger);
-end;
-
-procedure TDataController.RegisterView(View: IView);
-begin
-  fView := View;
 end;
 
 end.

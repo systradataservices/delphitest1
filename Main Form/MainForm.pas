@@ -127,10 +127,9 @@ end;
 constructor TfrmMain.Create(Aowner: TComponent);
 begin
   inherited;
-  InstanceFactory.TInstanceFactory.SingleInstance.CreateInstance(IDataController, fDataController);
+  InstanceFactory.TInstanceFactory.SingleInstance.CreateInstance(IDataController, fDataController, self as IView);
   if Assigned(fDataController) then
     begin
-      fDataController.RegisterView(self as IView);
       btnLoadData.Enabled := true;
     end
   else

@@ -21,7 +21,7 @@ type
     fRootItem : TDayAwareHashedComponent;
   protected
     function GetRootItem: IModelDataItem;
-    procedure DoInitialisation; override;
+    procedure DoInitialisation(Injected: IInterface); override;
     function LoadDataFromCSVFile(FileName: string; Logger: IErrorLog): boolean;
     procedure ReceiveNewServiceRecord(ServiceRecord: TServiceDefinition);
   public
@@ -41,7 +41,7 @@ begin
   inherited;
 end;
 
-procedure TBusServiceModel.DoInitialisation;
+procedure TBusServiceModel.DoInitialisation(Injected: IInterface);
 begin
   inherited;
   fRootItem  := TDayAwareHashedComponent.Create(nil);
@@ -64,13 +64,19 @@ begin
   Result := false;
   ClassesOK := false;
   if InstanceFactory.TInstanceFactory.SingleInstance.CreateInstance(IServiceLineParser, LineHelper) then
+    if InstanceFactory.TInstanceFactory.SingleInstance.CreateInstance(IBusServiceReader, Reader, LineHelper as IServiceLineParser) then
+      begin
+        ClassesOK := true;
+        Result := Reader.ReadData(FileName, Logger, self as IBusServiceModel);
+      end;
+  {if InstanceFactory.TInstanceFactory.SingleInstance.CreateInstance(IServiceLineParser, LineHelper) then
     begin
       if InstanceFactory.TInstanceFactory.SingleInstance.CreateInstance(IBusServiceReader, Reader) then
         begin
           ClassesOK := true;
           Result := Reader.ReadData(FileName, LineHelper, Logger, self as IBusServiceModel);
         end;
-    end;
+    end; }
 
    if not ClassesOK then
      begin

@@ -16,13 +16,13 @@ type
   TRefCounted = class(TObject, IInterface)
   protected
     fRefCount: integer;
-    procedure DoInitialisation; virtual;
+    procedure DoInitialisation(Injected: IInterface); virtual;
     { IInterface }
     function QueryInterface(const IID: TGUID; out Obj): HResult; virtual; stdcall;
     function _AddRef: Integer; stdcall;
     function _Release: Integer; stdcall;
   public
-    constructor CreateRefCounted; virtual;
+    constructor CreateRefCounted(Injected: IInterface = nil); virtual;
   end;
 
 implementation
@@ -32,13 +32,13 @@ uses
 
 { TRefCounted }
 
-constructor TRefCounted.CreateRefCounted;
+constructor TRefCounted.CreateRefCounted(Injected: IInterface = nil);
 begin
   inherited Create;
-  DoInitialisation;
+  DoInitialisation(Injected);
 end;
 
-procedure TRefCounted.DoInitialisation;
+procedure TRefCounted.DoInitialisation(Injected: IInterface);
 begin
   fRefCount := 0;
 end;

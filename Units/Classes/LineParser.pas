@@ -19,7 +19,7 @@ type
     function CharacterState(Character: Char): TCharacterState;
     function DecodeDayString(DaysString: string; var Error: boolean): TDaysOfWeek;
   protected
-    procedure DoInitialisation; override;
+    procedure DoInitialisation(Injected: IInterface); override;
     function ParseLine(Line: string; var Service: TServiceDefinition): TLineParseResult;
   public
   end;
@@ -96,7 +96,7 @@ begin
     end;
 end;
 
-procedure TServiceLineParser.DoInitialisation;
+procedure TServiceLineParser.DoInitialisation(Injected: IInterface);
 begin
   inherited;
   fLastState := csNothing;

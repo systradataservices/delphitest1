@@ -17,7 +17,7 @@ uses
 type
   IBusServiceReader = interface
   ['{382E16C5-F39F-479E-ADC3-C23B04847E26}']
-    function ReadData(FileName: string; LineReader: IServiceLineParser; ErrorLog: IErrorLog; ModelBuilder: IBusServiceModel): boolean;
+    function ReadData(FileName: string; ErrorLog: IErrorLog; ModelBuilder: IBusServiceModel): boolean;
   end;
 
 implementation

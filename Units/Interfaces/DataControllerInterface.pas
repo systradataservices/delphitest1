@@ -18,7 +18,6 @@ type
   ['{61B66603-03C5-43B5-AD54-6644E1FF9781}']
     function LoadDataFromCSVFile(FileName: string; Logger: IErrorLog): boolean;
     function DisplayDataByDaysOfWeekGrouping(Logger: IErrorLog): boolean;
-    procedure RegisterView(View: IView);
   end;
 
 implementation
