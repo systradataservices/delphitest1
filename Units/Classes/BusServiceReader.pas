@@ -54,25 +54,33 @@ begin
     begin
       if Assigned(fLineReader) then
         begin
-          AssignFile(TheFile, FileName);
+          try
+            AssignFile(TheFile, FileName);
 
-          Reset(TheFile);
-          while not EOF(TheFile) do
-            begin {read each line and parse through line reader interface}
-              ReadLn(TheFile, TheLine);
-              if fLineReader.ParseLine(TheLine, ServiceDef) = prNoError then
-                begin
-                  if Assigned(ModelBuilder) then
-                    ModelBuilder.ReceiveNewServiceRecord(ServiceDef);
-                end
-              else
-                begin
-                  Result := false;
-                  LogLine := Format(C_ERROR_FORMAT, [TheLine]);
-                  if Assigned(ErrorLog) then
-                    ErrorLog.AddErrorLine(LogLine);
-                end;
-            end;  {read each line and parse through line reader interface}
+            Reset(TheFile);
+            while not EOF(TheFile) do
+              begin {read each line and parse through line reader interface}
+                ReadLn(TheFile, TheLine);
+                if fLineReader.ParseLine(TheLine, ServiceDef) = prNoError then
+                  begin
+                    if Assigned(ModelBuilder) then
+                      ModelBuilder.ReceiveNewServiceRecord(ServiceDef);
+                  end
+                else
+                  begin
+                    Result := false;
+                    LogLine := Format(C_ERROR_FORMAT, [TheLine]);
+                    if Assigned(ErrorLog) then
+                      ErrorLog.AddErrorLine(LogLine);
+                  end;
+              end;  {read each line and parse through line reader interface}
+          except on E: Exception do
+            begin
+              Result := false;
+              if Assigned(ErrorLog) then
+              ErrorLog.AddErrorLine(Format(C_ERROR_READING_FILE, [E.Message]));
+            end;
+          end;
         end
       else
         begin

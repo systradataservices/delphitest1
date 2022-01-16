@@ -30,6 +30,7 @@ const
   C_ERROR_NO_CLASS        = 'Error. Required implementation classes not registered.';
   C_GENERAL_DISPLAY_ERROR = 'Error. Unspecified display error';
   C_ERROR_NO_LINEREADER   = 'Error. Controller has no valid Line Reader item.';
+  C_ERROR_READING_FILE    = 'Error. Exception encountered reading file. Exception text: %S';
   C_ERROR_NO_VIEW         = 'Error. Controller has no valid View item.';
   C_ERROR_NO_MODEL        = 'Error. Controller has no valid Model item.';
   C_ERROR_NO_ROOT         = 'Error. Controller has no valid data root item.';
