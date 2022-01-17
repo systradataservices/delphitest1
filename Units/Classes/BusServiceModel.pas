@@ -69,14 +69,6 @@ begin
         ClassesOK := true;
         Result := Reader.ReadData(FileName, Logger, self as IBusServiceModel);
       end;
-  {if InstanceFactory.TInstanceFactory.SingleInstance.CreateInstance(IServiceLineParser, LineHelper) then
-    begin
-      if InstanceFactory.TInstanceFactory.SingleInstance.CreateInstance(IBusServiceReader, Reader) then
-        begin
-          ClassesOK := true;
-          Result := Reader.ReadData(FileName, LineHelper, Logger, self as IBusServiceModel);
-        end;
-    end; }
 
    if not ClassesOK then
      begin
