@@ -1,0 +1,48 @@
+﻿<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <ProjectGuid>{3FF15A5D-8CBE-4E4B-9213-BD619F673BBE}</ProjectGuid>
+    </PropertyGroup>
+    <ItemGroup>
+        <Projects Include="Project\BusServiceReview.dproj">
+            <Dependencies/>
+        </Projects>
+        <Projects Include="Test Project\BusServiceTestProject.dproj">
+            <Dependencies/>
+        </Projects>
+    </ItemGroup>
+    <ProjectExtensions>
+        <Borland.Personality>Default.Personality.12</Borland.Personality>
+        <Borland.ProjectType/>
+        <BorlandProject>
+            <Default.Personality/>
+        </BorlandProject>
+    </ProjectExtensions>
+    <Target Name="BusServiceReview">
+        <MSBuild Projects="Project\BusServiceReview.dproj"/>
+    </Target>
+    <Target Name="BusServiceReview:Clean">
+        <MSBuild Projects="Project\BusServiceReview.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="BusServiceReview:Make">
+        <MSBuild Projects="Project\BusServiceReview.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="BusServiceTestProject">
+        <MSBuild Projects="Test Project\BusServiceTestProject.dproj"/>
+    </Target>
+    <Target Name="BusServiceTestProject:Clean">
+        <MSBuild Projects="Test Project\BusServiceTestProject.dproj" Targets="Clean"/>
+    </Target>
+    <Target Name="BusServiceTestProject:Make">
+        <MSBuild Projects="Test Project\BusServiceTestProject.dproj" Targets="Make"/>
+    </Target>
+    <Target Name="Build">
+        <CallTarget Targets="BusServiceReview;BusServiceTestProject"/>
+    </Target>
+    <Target Name="Clean">
+        <CallTarget Targets="BusServiceReview:Clean;BusServiceTestProject:Clean"/>
+    </Target>
+    <Target Name="Make">
+        <CallTarget Targets="BusServiceReview:Make;BusServiceTestProject:Make"/>
+    </Target>
+    <Import Project="$(BDS)\Bin\CodeGear.Group.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Group.Targets')"/>
+</Project>
