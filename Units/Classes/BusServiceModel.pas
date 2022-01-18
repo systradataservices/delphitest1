@@ -63,6 +63,7 @@ begin
   go out of scope, reference counting will ensure that they are freed}
   Result := false;
   ClassesOK := false;
+  fRootItem.ServiceScheduleGroups := [];
   if InstanceFactory.TInstanceFactory.SingleInstance.CreateInstance(IServiceLineParser, LineHelper) then
     if InstanceFactory.TInstanceFactory.SingleInstance.CreateInstance(IBusServiceReader, Reader, LineHelper as IServiceLineParser) then
       begin
@@ -97,9 +98,10 @@ begin
           tempSchedule := tempService.FindAddChildByName(C_SCHEDULE, TServiceSchedule) as TServiceSchedule;
           if Assigned(tempSchedule) then
             begin
-              tempSchedule.DaysOfWeek := ServiceRecord.ActiveDays;
-              tempService.ServiceScheduleGroups  := tempService.ServiceScheduleGroups + tempSchedule.ServiceScheduleGroups;
+              tempSchedule.DaysOfWeek            := ServiceRecord.ActiveDays;
+              tempService.ServiceScheduleGroups  := tempService.ServiceScheduleGroups  + tempSchedule.ServiceScheduleGroups;
               tempOperator.ServiceScheduleGroups := tempOperator.ServiceScheduleGroups + tempSchedule.ServiceScheduleGroups;
+              fRootItem.ServiceScheduleGroups    := fRootItem.ServiceScheduleGroups    + tempSchedule.ServiceScheduleGroups;
             end;
         end;
     end;

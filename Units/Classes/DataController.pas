@@ -11,8 +11,8 @@ unit DataController;
 interface
 
 uses
-  Classes,
-  RefCountedClass,
+  Classes, ComCtrls, SysUtils,
+  RefCountedClass, BusServiceDataTypesAndConstants,
   ViewInterface, ErrorLoggingInterface, DataControllerInterface, BusServiceModelInterface;
 
 type
@@ -20,10 +20,14 @@ type
   private
     fModel: IBusServiceModel;
     fView : IView;
+    function ScheduleGroupFromGroupName(GroupName: string): TServiceScheduleGroup;
+    function ScheduleGroupFromNode(Node: TTreeNode): TServiceScheduleGroup;
   protected
     procedure DoInitialisation(Injected: IInterface); override;
     function LoadDataFromCSVFile(FileName: string; Logger: IErrorLog): boolean;
-    function DisplayDataByDaysOfWeekGrouping(Logger: IErrorLog): boolean;
+
+    function AddScheduleGroupNodes(Logger: IErrorLog): boolean;
+    procedure AddChildNodes(ParentNode: TTreeNode; Logger: IErrorLog);
   public
     destructor Destroy; override;
   end;
@@ -31,123 +35,106 @@ type
 implementation
 
 uses
-  BusServiceReader, MainForm, Forms, InstanceFactory, BusServiceDataTypesAndConstants,
-  ComCtrls, ModelDataItemInterface;
+  BusServiceReader, MainForm, Forms, InstanceFactory,
+  ModelDataItemInterface;
 
 { TDataController }
+
+procedure TDataController.AddChildNodes(ParentNode: TTreeNode; Logger: IErrorLog);
+var
+  RootItem : IModelDataItem;
+  NodeItem : IModelDataItem;
+  ChildItem: IModelDataItem;
+  Counter1 : integer;
+  ChildNode: TTreeNode;
+  ThisScheduleGroup: TServiceScheduleGroup;
+begin
+  NodeItem := nil;
+  if not assigned(ParentNode) then
+    begin
+      if Assigned(Logger) then
+        Logger.AddErrorLine(C_ERROR_NO_NODE);
+      exit;
+    end;
+
+  RootItem := fModel.RootItem;
+  if not Assigned(RootItem) then
+    begin
+      if Assigned(Logger) then
+        Logger.AddErrorLine(C_ERROR_NO_ROOT);
+      Exit;
+    end;
+
+  try
+    {this line can raise an exception if top node name is unsuitable}
+    ThisScheduleGroup := ScheduleGroupFromNode(ParentNode);
+
+    if ParentNode.Level = 0 then
+      NodeItem := RootItem
+    else
+      NodeItem := RootItem.GetModelDataItemByName(ParentNode.Text);
+
+    if Assigned(NodeItem) then
+      begin
+        for counter1 := 0 to NodeItem.ModelDataItemCount - 1 do
+          begin {each child item}
+            ChildItem := NodeItem.ModelDataItem[Counter1];
+            if Assigned(ChildItem) and (ThisScheduleGroup in ChildItem.ServiceScheduleGroups) then
+              begin
+                ChildNode := fView.AddChildNode(ParentNode, ChildItem.DisplayString);
+                ChildNode.Data := ChildItem;
+                if ChildItem.CanDisplaySubItems and (ThisScheduleGroup in ChildItem.ServiceScheduleGroups) then
+                  fView.AddDummyNode(ChildNode);
+              end;
+          end;  {each child item}
+      end;
+  except on E: Exception do
+    if Assigned(Logger) then
+      Logger.AddErrorLine(E.Message);
+  end;
+end;
+
+function TDataController.AddScheduleGroupNodes(Logger: IErrorLog): boolean;
+var
+  GroupCounter : TServiceScheduleGroup;
+  Node         : TTreeNode;
+  RootItem     : IModelDataItem;
+begin
+  Result := true;
+  if not Assigned(fView) then
+    begin
+      Result := false;
+      if Assigned(Logger) then
+        Logger.AddErrorLine(C_ERROR_NO_VIEW);
+      Exit;
+    end;
+
+  RootItem := fModel.RootItem;
+  if not Assigned(RootItem) then
+    begin
+      Result := false;
+      if Assigned(Logger) then
+        Logger.AddErrorLine(C_ERROR_NO_ROOT);
+      Exit;
+    end;
+
+  for GroupCounter := Low(TServiceScheduleGroup) to High(TServiceScheduleGroup) do
+    begin
+      Node := fView.AddTopLevelNode(CA_SCHEDULE_GROUPNAMES[GroupCounter]);
+      if GroupCounter in RootItem.ServiceScheduleGroups then
+        fView.AddDummyNode(Node);
+      Result := Result and Assigned(Node);
+    end;
+
+  if not Result then
+    if Assigned(Logger) then
+      Logger.AddErrorLine(C_ERROR_NO_NODE);
+end;
 
 destructor TDataController.Destroy;
 begin
   fModel := nil;
   inherited;
-end;
-
-function TDataController.DisplayDataByDaysOfWeekGrouping(Logger: IErrorLog): boolean;
-var
-  GroupCounter : TServiceScheduleGroup;
-  Node         : TTreeNode;
-  OpNode       : TTreeNode;
-  ServNode     : TTreeNode;
-  Counter1     : integer;
-  Counter2     : integer;
-  RootItem     : IModelDataItem;
-  tempOperator : IModelDataItem;
-  tempService  : IModelDataItem;
-  tempSched    : IModelDataItem;
-  tempString   : string;
-  ErrorString  : string;
-begin
-  result := false;
-  if Assigned(fView) then
-    begin {view assigned}
-      Result := true;
-      fView.ClearDisplay;
-      if Assigned(fModel) then
-        begin {we have a model}
-          RootItem := fModel.RootItem;
-          if Assigned(RootItem) then
-            begin {we have a data root to read from}
-              for GroupCounter := Low(TServiceScheduleGroup) to High(TServiceScheduleGroup) do
-                begin {each days group}
-                  Node := fView.AddTopLevelNode(CA_SCHEDULE_GROUPNAMES[GroupCounter]);
-                  if Assigned(Node) then
-                    begin {node came back from the view OK}
-                      Node.Data := nil;
-                      for counter1 := 0 to RootItem.ModelDataItemCount - 1 do
-                        begin {each top level item in the structured model}
-                          tempOperator := RootItem.ModelDataItem[Counter1];
-                          if Assigned(tempOperator) then
-                            begin {got operator item OK}
-                              if GroupCounter in tempOperator.ServiceScheduleGroups then
-                                begin {this operator runs on this day group}
-                                  OpNode := fView.AddChildNode(Node, tempOperator.FriendlyName);
-                                  if Assigned(OpNode) then
-                                    begin {node came back from the view OK}
-                                      OpNode.Data := tempOperator;
-                                      for counter2 := 0 to tempOperator.ModelDataItemCount - 1 do
-                                        begin {each service owned by the operator}
-                                          tempService := tempOperator.ModelDataItem[Counter2];
-                                          if Assigned(tempService) then
-                                            begin {got the service oK}
-                                               if GroupCounter in tempService.ServiceScheduleGroups then
-                                                 begin  {this service runs on this day group}
-                                                   tempString := '';
-                                                   if tempService.ModelDataItemCount > 0 then
-                                                     begin {service owns at least one item (schedule)}
-                                                       tempSched := tempService.ModelDataItem[0];
-                                                       if Assigned(tempSched) then
-                                                         tempString := tempSched.MakeActveDaysString;
-                                                     end;  {service owns at least one item (schedule)}
-                                                   if tempString <> '' then
-                                                     tempString := tempService.FriendlyName + ' ' + tempString
-                                                   else
-                                                     tempString := tempService.FriendlyName;
-
-                                                   ServNode := fView.AddChildNode(OpNode, tempString);
-                                                   ServNode.Data := tempService;
-                                                 end;   {this service runs on this day group}
-                                            end;  {got the service oK}
-                                        end;  {each service owned by the operator}
-                                    end   {node came back from the view OK}
-                                  else
-                                    begin {view failed to provide display element}
-                                      ErrorString := C_ERROR_NO_NODE;
-                                    end;  {view failed to provide display element}
-                                end;  {this operator runs on this day group}
-                            end;  {got operator item OK}
-                        end;  {each top level item in the structured model}
-                    end   {node came back from the view OK}
-                  else
-                    begin {view failed to provide display element}
-                      ErrorString := C_ERROR_NO_NODE;
-                    end;  {view failed to provide display element}
-                end;  {each days group}
-            end   {we have a data root to read from}
-          else
-            begin {no data root}
-              ErrorString := C_ERROR_NO_ROOT;
-            end;  {no data root}
-        end  {we have a model}
-      else
-        begin {model not assigned}
-          ErrorString := C_ERROR_NO_MODEL;
-        end;  {model not assigned}
-      {sorting of the tree takes as long as the
-      load and populate for the supplied data.}
-      fView.SortNodes;
-    end  {view assigned}
-  else
-    begin {view not assigned}
-      ErrorString := C_ERROR_NO_VIEW;
-    end;  {view not assigned}
-
-  if not Result then
-    begin
-      if ErrorString = '' then
-        ErrorString := C_GENERAL_DISPLAY_ERROR;
-      if Assigned(Logger) then
-        Logger.AddErrorLine(ErrorString);
-    end;
 end;
 
 procedure TDataController.DoInitialisation(Injected: IInterface);
@@ -160,6 +147,48 @@ end;
 function TDataController.LoadDataFromCSVFile(FileName: string; Logger: IErrorLog): boolean;
 begin
   Result := fModel.LoadDataFromCSVFile(FileName, Logger);
+end;
+
+function TDataController.ScheduleGroupFromGroupName(
+  GroupName: string): TServiceScheduleGroup;
+begin
+  if GroupName = CA_SCHEDULE_GROUPNAMES[sgWeekdays] then
+    Result := sgWeekdays
+  else if Groupname = CA_SCHEDULE_GROUPNAMES[sgSaturday] then
+    Result := sgSaturday
+  else if GroupName = CA_SCHEDULE_GROUPNAMES[sgSunday] then
+    Result := sgSunday
+  else
+    raise Exception.Create(C_ERROR_INVALID_GROUP);
+end;
+
+function TDataController.ScheduleGroupFromNode(
+  Node: TTreeNode): TServiceScheduleGroup;
+var
+  ParentNode: TTreeNode;
+  ErrorMessage: string;
+begin
+  result       := sgWeekdays;
+  ErrorMessage := '';
+  ParentNode   := Node;
+  if Assigned(ParentNode) then
+    begin
+      while Assigned(ParentNode.Parent) do
+        ParentNode := ParentNode.Parent;
+
+      try
+        Result := ScheduleGroupFromGroupName(Trim(ParentNode.Text));
+      except on E: Exception do
+        ErrorMessage := E.Message;
+      end;
+    end
+  else
+    begin
+      ErrorMessage := C_ERROR_NODE_DATA;
+    end;
+
+  if ErrorMessage <> '' then
+    raise exception .Create(ErrorMessage);
 end;
 
 end.

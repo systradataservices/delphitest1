@@ -11,13 +11,14 @@ unit DataControllerInterface;
 interface
 
 uses
-  ErrorLoggingInterface, ViewInterface;
+  ErrorLoggingInterface, ViewInterface, ComCtrls;
 
 type
   IDataController = interface
   ['{61B66603-03C5-43B5-AD54-6644E1FF9781}']
     function LoadDataFromCSVFile(FileName: string; Logger: IErrorLog): boolean;
-    function DisplayDataByDaysOfWeekGrouping(Logger: IErrorLog): boolean;
+    function AddScheduleGroupNodes(Logger: IErrorLog): boolean;
+    procedure AddChildNodes(ParentNode: TTreeNode; Logger: IErrorLog);
   end;
 
 implementation

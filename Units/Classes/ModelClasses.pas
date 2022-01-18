@@ -20,10 +20,13 @@ type
   private
     FServiceScheduleGroups: TServiceScheduleGroups;
   protected
+    function CanDisplaySubItems: boolean; virtual;
+    function DisplayString: string;
     function MakeActveDaysString: string; virtual;
     procedure SetServiceScheduleGroups(const Value: TServiceScheduleGroups);
     function GetServiceScheduleGroups: TServiceScheduleGroups;
     function GetModelDataItem(index: integer): IModelDataItem;
+    function GetModelDataItemByName(ItemName: string): IModelDataItem;
     function GetModelDataItemCount: integer;
   public
     constructor Create(Aowner: TComponent); override;
@@ -32,7 +35,11 @@ type
 
   TBusServiceOperator = class(TDayAwareHashedComponent);
 
-  TBusService = class(TDayAwareHashedComponent);
+  TBusService = class(TDayAwareHashedComponent)
+  protected
+    function MakeActveDaysString: string; override;
+    function CanDisplaySubItems: boolean; override;
+  end;
 
   TServiceSchedule = class(TDayAwareHashedComponent)
   private
@@ -92,6 +99,11 @@ end;
 
 { TDayAwareHashedComponent }
 
+function TDayAwareHashedComponent.CanDisplaySubItems: boolean;
+begin
+  Result := true;
+end;
+
 constructor TDayAwareHashedComponent.Create(Aowner: TComponent);
 begin
   inherited;
@@ -102,6 +114,11 @@ procedure TDayAwareHashedComponent.SetServiceScheduleGroups(
   const Value: TServiceScheduleGroups);
 begin
   FServiceScheduleGroups := Value;
+end;
+
+function TDayAwareHashedComponent.DisplayString: string;
+begin
+  Result := FriendlyName + MakeActveDaysString;
 end;
 
 function TDayAwareHashedComponent.GetModelDataItem(index: integer): IModelDataItem;
@@ -124,6 +141,12 @@ begin
       end;
 end;
 
+function TDayAwareHashedComponent.GetModelDataItemByName(
+  ItemName: string): IModelDataItem;
+begin
+  Result := FindChildByName(ItemName) as IModelDataItem;
+end;
+
 function TDayAwareHashedComponent.GetModelDataItemCount: integer;
 var
   Counter1: integer;
@@ -143,6 +166,23 @@ end;
 function TDayAwareHashedComponent.MakeActveDaysString: string;
 begin
   Result := '';
+end;
+
+{ TBusService }
+
+function TBusService.CanDisplaySubItems: boolean;
+begin
+  Result := false;
+end;
+
+function TBusService.MakeActveDaysString: string;
+var
+  Sched: IModelDataItem;
+begin
+  Result := '';
+  Sched := GetModelDataItem(0);
+  if Assigned(Sched) then
+    Result := Sched.MakeActveDaysString;
 end;
 
 end.

@@ -1,40 +1,36 @@
 ﻿[Closed Files]
-File_0=TSourceModule,'C:\SYSTRA\DelphiTest1\Units\Classes\InstanceFactory.pas',0,1,41,1,50,0,0,,
-File_1=TSourceModule,'C:\SYSTRA\DelphiTest1\Main Form\MainForm.pas',0,1,122,1,131,0,0,,
-File_2=TSourceModule,'C:\SYSTRA\DelphiTest1\Units\Interfaces\BusServiceReaderInterface.pas',0,1,1,41,20,0,0,,
-File_3=TSourceModule,'C:\SYSTRA\DelphiTest1\Units\Classes\RefCountedClass.pas',0,1,27,1,38,0,0,,
-File_4=TSourceModule,'C:\SYSTRA\DelphiTest1\Units\Classes\BusServiceModel.pas',0,1,56,136,67,0,0,,
-File_5=TSourceModule,'C:\SYSTRA\DelphiTest1\Units\Classes\LineParser.pas',0,1,8,1,22,0,0,,
-File_6=TSourceModule,'C:\SYSTRA\DelphiTest1\Units\Classes\DataController.pas',0,1,151,1,158,0,0,,
-File_7=TSourceModule,'c:\program files (x86)\embarcadero\studio\21.0\SOURCE\RTL\SYS\System.pas',0,1,19253,1,19274,0,0,,
-File_8=TSourceModule,'C:\SYSTRA\DelphiTest1\Units\Interfaces\BusServiceModelInterface.pas',0,1,1,1,21,0,0,,
-File_9=TSourceModule,'C:\SYSTRA\DelphiTest1\Units\Interfaces\DataControllerInterface.pas',0,1,1,74,20,0,0,,
-File_10=TSourceModule,'C:\SYSTRA\DelphiTest1\Units\ClassRegistration.pas',0,1,1,49,8,0,0,,
-File_11=TSourceModule,'C:\SYSTRA\DelphiTest1\Units\Classes\ModelClasses.pas',0,1,1,60,19,0,0,,
-File_12=TSourceModule,'C:\SYSTRA\DelphiTest1\Units\Interfaces\ModelDataItemInterface.pas',0,1,1,15,5,0,0,,
+File_0=TSourceModule,'C:\SYSTRA\DelphiTest1\Units\Interfaces\DataControllerInterface.pas',0,1,1,80,19,0,0,,
+File_1=TSourceModule,'C:\SYSTRA\DelphiTest1\Units\Interfaces\BusServiceModelInterface.pas',0,1,1,34,20,0,0,,
+File_2=TSourceModule,'C:\SYSTRA\DelphiTest1\Units\Types And Constants\BusServiceDataTypesAndConstants.pas',0,1,16,17,46,0,0,,
+File_3=TSourceModule,'C:\SYSTRA\DelphiTest1\Units\Interfaces\ViewInterface.pas',0,1,1,51,13,0,0,,
+File_4=TSourceModule,'C:\SYSTRA\DelphiTest1\Main Form\MainForm.pas',0,1,128,5,148,0,0,,
+File_5=TSourceModule,'C:\SYSTRA\DelphiTest1\Units\Classes\DataController.pas',0,1,93,9,119,0,0,,
+File_6=TSourceModule,'C:\SYSTRA\DelphiTest1\Units\Classes\LineParser.pas',0,1,1,1,105,0,0,,
+File_7=TSourceModule,'C:\SYSTRA\DelphiTest1\Units\Classes\BusServiceReader.pas',0,1,49,34,78,0,0,,
+File_8=TSourceModule,'C:\SYSTRA\DelphiTest1\Units\Classes\ModelClasses.pas',0,1,173,19,175,0,0,,
+File_9=TSourceModule,'C:\SYSTRA\DelphiTest1\Units\Classes\HashedComponent.pas',0,1,10,1,29,0,0,,
+File_10=TSourceModule,'C:\SYSTRA\DelphiTest1\Units\Classes\BusServiceModel.pas',0,1,1,1,1,0,0,,
+File_11=TSourceModule,'C:\SYSTRA\DelphiTest1\Units\ClassRegistration.pas',0,1,1,1,1,0,0,,
+File_12=TSourceModule,'C:\SYSTRA\DelphiTest1\Units\Classes\InstanceFactory.pas',0,1,1,1,1,0,0,,
+File_13=TSourceModule,'C:\SYSTRA\DelphiTest1\Units\Classes\RefCountedClass.pas',0,1,1,1,1,0,0,,
 
 [Modules]
-Module0=C:\SYSTRA\DelphiTest1\Units\Classes\BusServiceReader.pas
+Module0=C:\SYSTRA\DelphiTest1\Units\Interfaces\ModelDataItemInterface.pas
 Module1=default.htm
-Module2=C:\SYSTRA\DelphiTest1\Units\Types And Constants\BusServiceDataTypesAndConstants.pas
-Count=3
+Count=2
 EditWindowCount=1
 
-[C:\SYSTRA\DelphiTest1\Units\Classes\BusServiceReader.pas]
+[C:\SYSTRA\DelphiTest1\Units\Interfaces\ModelDataItemInterface.pas]
 ModuleType=TSourceModule
 
 [default.htm]
 ModuleType=TURLModule
 
-[C:\SYSTRA\DelphiTest1\Units\Types And Constants\BusServiceDataTypesAndConstants.pas]
-ModuleType=TSourceModule
-
 [EditWindow0]
-ViewCount=3
-CurrentEditView=C:\SYSTRA\DelphiTest1\Units\Classes\BusServiceReader.pas
+ViewCount=2
+CurrentEditView=C:\SYSTRA\DelphiTest1\Units\Interfaces\ModelDataItemInterface.pas
 View0=0
 View1=1
-View2=2
 PercentageSizes=1
 Create=1
 Visible=1
@@ -70,25 +66,14 @@ WelcomePageURL=bds:/default.htm
 
 [View1]
 CustomEditViewType=TEditView
-Module=C:\SYSTRA\DelphiTest1\Units\Classes\BusServiceReader.pas
-CursorX=78
-CursorY=81
-TopLine=42
-LeftCol=1
-Elisions=
-Bookmarks=
-EditViewName=C:\SYSTRA\DelphiTest1\Units\Classes\BusServiceReader.pas
-
-[View2]
-CustomEditViewType=TEditView
-Module=C:\SYSTRA\DelphiTest1\Units\Types And Constants\BusServiceDataTypesAndConstants.pas
-CursorX=23
-CursorY=33
+Module=C:\SYSTRA\DelphiTest1\Units\Interfaces\ModelDataItemInterface.pas
+CursorX=19
+CursorY=23
 TopLine=1
 LeftCol=1
 Elisions=
 Bookmarks=
-EditViewName=C:\SYSTRA\DelphiTest1\Units\Types And Constants\BusServiceDataTypesAndConstants.pas
+EditViewName=C:\SYSTRA\DelphiTest1\Units\Interfaces\ModelDataItemInterface.pas
 
 [Watches]
 Count=0
@@ -229,11 +214,11 @@ State=0
 Left=0
 Top=0
 Width=1997
-Height=6522
+Height=8584
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=1997
-ClientHeight=6522
+ClientHeight=8584
 TBDockHeight=5956
 LRDockWidth=2513
 Dockable=1
@@ -245,8 +230,8 @@ Create=1
 Visible=0
 Docked=1
 State=0
-Left=-1591
-Top=277
+Left=0
+Top=0
 Width=275
 Height=363
 MaxLeft=-1
@@ -350,11 +335,11 @@ State=0
 Left=0
 Top=0
 Width=2337
-Height=991
+Height=1230
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=2337
-ClientHeight=991
+ClientHeight=1230
 TBDockHeight=2319
 LRDockWidth=2823
 Dockable=1
@@ -415,11 +400,11 @@ State=0
 Left=0
 Top=0
 Width=1997
-Height=6522
+Height=8584
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=1997
-ClientHeight=6522
+ClientHeight=8584
 TBDockHeight=4885
 LRDockWidth=7147
 Dockable=1
@@ -431,8 +416,8 @@ Create=1
 Visible=0
 Docked=1
 State=0
-Left=395
-Top=889
+Left=0
+Top=0
 Width=2858
 Height=3212
 MaxLeft=-1
@@ -451,7 +436,7 @@ Visible=0
 Docked=1
 State=0
 Left=-8
-Top=-124
+Top=-8
 Width=1847
 Height=3142
 MaxLeft=-1
@@ -555,11 +540,11 @@ State=0
 Left=0
 Top=0
 Width=1997
-Height=6522
+Height=8584
 MaxLeft=-1
 MaxTop=-1
 ClientWidth=1997
-ClientHeight=6522
+ClientHeight=8584
 TBDockHeight=4885
 LRDockWidth=5310
 Dockable=1
@@ -619,8 +604,8 @@ Create=1
 Visible=0
 Docked=1
 State=0
-Left=0
-Top=28
+Left=8
+Top=8
 Width=3824
 Height=1416
 MaxLeft=-1

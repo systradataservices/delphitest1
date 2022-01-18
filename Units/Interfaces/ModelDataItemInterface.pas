@@ -18,14 +18,19 @@ type
   IModelDataItem = interface
   ['{92E8CF63-73AB-45A5-A44E-86095C753107}']
     function GetModelDataItem(index: integer): IModelDataItem;
+    function GetModelDataItemByName(ItemName: string): IModelDataItem;
     function GetModelDataItemCount: integer;
-    property ModelDataItemCount: integer read GetModelDataItemCount;
     procedure SetServiceScheduleGroups(const Value: TServiceScheduleGroups);
     function GetServiceScheduleGroups: TServiceScheduleGroups;
     function GetFriendlyName: string;
     procedure SetFriendlyname(const Value: string);
     function MakeActveDaysString: string;
+    function DisplayString: string;
+    function CanDisplaySubItems: boolean;
+
+    property ModelDataItemCount: integer read GetModelDataItemCount;
     property ModelDataItem[index: integer]: IModelDataItem read GetModelDataItem;
+    property ModelDataItemByName[ItemName: string]: IModelDataItem read GetModelDataItemByName;
     property ServiceScheduleGroups: TServiceScheduleGroups read GetServiceScheduleGroups write SetServiceScheduleGroups;
     property FriendlyName: string read GetFriendlyName write SetFriendlyname;
   end;

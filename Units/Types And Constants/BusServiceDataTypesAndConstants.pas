@@ -35,10 +35,15 @@ const
   C_ERROR_NO_MODEL        = 'Error. Controller has no valid Model item.';
   C_ERROR_NO_ROOT         = 'Error. Controller has no valid data root item.';
   C_ERROR_NO_NODE         = 'Error. View failed to supply display element.';
+  C_ERROR_NODE_DATA       = 'Error. Unable to access tree node data item.';
+  C_ERROR_INVALID_GROUP   = 'Error. Top level node: inappropriate name.';
   C_SCHEDULE              = 'Schedule';
   C_NOT_RUNNING           = '-';
   C_NO_DATA_COMPONENTS    = 'No Data';
-  C_READ_AND_DISPLAY_TIME = 'Read & display: %Dms';
+  C_READ_TIME             = 'Read: %Dms';
+  C_CSV_FILTER            = 'CSV Files (*.csv)|*.csv';
+  C_STRING_STRING         = '%S: %S';
+  C_PRECISE_TIME          = 'hh:mm:ss:zzz';
 
   C_WEEKDAYS: TDaysOfWeek = [dwMonday, dwTuesday, dwWednesday, dwThursday, dwFriday];
 

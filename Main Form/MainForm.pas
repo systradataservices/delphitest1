@@ -16,22 +16,24 @@ uses
   Winapi.Windows, Winapi.Messages, System.SysUtils, System.Variants, System.Classes, Vcl.Graphics,
   Vcl.Controls, Vcl.Forms, Vcl.Dialogs, ViewInterface, Vcl.StdCtrls,
   Vcl.ExtCtrls, Vcl.ComCtrls, ErrorLoggingInterface,
-  DataControllerInterface;
+  DataControllerInterface, BusServiceDataTypesAndConstants;
 
 type
   TfrmMain = class(TForm, IView, IErrorLog)
     pnlTop: TPanel;
     btnLoadData: TButton;
-    MainPages: TPageControl;
-    ServicesPage: TTabSheet;
-    ErrorsPage: TTabSheet;
-    ErrorLog: TMemo;
     StatusBar1: TStatusBar;
-    BusDataTree: TTreeView;
+    pnlMain: TPanel;
     Splitter1: TSplitter;
-    pnlInfoArea: TPanel;
-    lblAddInfo: TLabel;
+    pnlErrorLog: TPanel;
+    ErrorLog: TMemo;
+    lblErrorLog: TLabel;
+    pnlTree: TPanel;
+    BusDataTree: TTreeView;
+    lblBusServices: TLabel;
     procedure btnLoadDataClick(Sender: TObject);
+    procedure BusDataTreeExpanding(Sender: TObject; Node: TTreeNode;
+      var AllowExpansion: Boolean);
   private
     { Private declarations }
     fDataController: IDataController;
@@ -41,11 +43,9 @@ type
     procedure AddErrorLine(ErrorLine: string);
 
     {IDisplayInterface}
-    procedure ClearDisplay;
     function AddTopLevelNode(ItemName: string): TTreeNode;
     function AddChildNode(Parent: TTreeNode; ItemName: string): TTreeNode;
-    procedure SortNodes;
-    procedure ExpandNodes; {s.l.o.w.}
+    procedure AddDummyNode(ParentNode: TTreeNode);
   public
     { Public declarations }
     constructor Create(Aowner: TComponent); override;
@@ -58,7 +58,7 @@ var
 implementation
 
 uses
-  BusServiceDataTypesAndConstants, InstanceFactory;
+  InstanceFactory;
 
 {$R *.dfm}
 
@@ -71,9 +71,15 @@ begin
     end;
 end;
 
+procedure TfrmMain.AddDummyNode(ParentNode: TTreeNode);
+begin
+  if Assigned(ParentNode) then
+    BusDataTree.Items.AddChild(ParentNode, '');
+end;
+
 procedure TfrmMain.AddErrorLine(ErrorLine: string);
 begin
-  ErrorLog.Lines.Add(ErrorLine);
+  ErrorLog.Lines.Add(Format(C_STRING_STRING, [FormatDateTime(C_PRECISE_TIME, Now), ErrorLine]));
 end;
 
 function TfrmMain.AddTopLevelNode(ItemName: string): TTreeNode;
@@ -83,29 +89,31 @@ end;
 
 procedure TfrmMain.btnLoadDataClick(Sender: TObject);
 var
-  AllOK: boolean;
   OD: TOpenDialog;
   Ticks: Cardinal;
 begin
+  BusDataTree.Items.BeginUpdate;
+  try
+    BusDataTree.Items.Clear;
+  finally
+    BusDataTree.Items.EndUpdate;
+  end;
+
   if Assigned(fDataController) then
     begin
       OD := TOpenDialog.Create(self);
       try
         btnLoadData.Enabled := false;
         OD.InitialDir := ExtractFilePath(Application.ExeName);
-        OD.Filter := 'CSV Files (*.csv)|*.csv';
+        OD.Filter     := C_CSV_FILTER;
         if OD.Execute then
           begin
             Ticks := GetTickCount;
-            AllOK := fDataController.LoadDataFromCSVFile(OD.FileName, self as IErrorLog) and
-                     fDataController.DisplayDataByDaysOfWeekGrouping(self as IErrorLog);
+            if fDataController.LoadDataFromCSVFile(OD.FileName, self as IErrorLog) then
+              fDataController.AddScheduleGroupNodes(self as IErrorLog);
 
-            if AllOK then
-              MainPages.ActivePage := ServicesPage
-            else
-              MainPages.ActivePage := ErrorsPage;
             Ticks := GetTickCount - Ticks;
-            StatusBar1.Panels[0].Text := Format(C_READ_AND_DISPLAY_TIME, [Ticks]);
+            StatusBar1.Panels[0].Text := Format(C_READ_TIME, [Ticks]);
           end;
       finally
         OD.Free;
@@ -114,9 +122,29 @@ begin
     end;
 end;
 
-procedure TfrmMain.ClearDisplay;
+procedure TfrmMain.BusDataTreeExpanding(Sender: TObject; Node: TTreeNode;
+  var AllowExpansion: Boolean);
 begin
-  BusDataTree.Items.Clear;
+  {dynamically add child nodes when a node is expanded rather than
+  loading up the view (and wasting time) by loading everything at
+  the start.}
+  if not Assigned(fDataController) then
+    begin
+      AllowExpansion := false;
+      Exit;
+    end;
+
+  BusDataTree.Items.BeginUpdate;
+  try
+    if Assigned(Node) then
+      begin
+        Node.DeleteChildren;
+        fDataController.AddChildNodes(Node, self as IErrorLog);
+        Node.AlphaSort;
+      end;
+  finally
+    BusDataTree.Items.EndUpdate;
+  end;
 end;
 
 procedure TfrmMain.ClearLog;
@@ -143,17 +171,6 @@ destructor TfrmMain.Destroy;
 begin
   fDataController := nil;
   inherited;
-end;
-
-procedure TfrmMain.ExpandNodes;
-begin
-  BusDataTree.FullExpand;
-end;
-
-procedure TfrmMain.SortNodes;
-begin
-  BusDataTree.SortType := stText;
-  BusDataTree.AlphaSort(true);
 end;
 
 end.

@@ -34,93 +34,6 @@ object frmMain: TfrmMain
       OnClick = btnLoadDataClick
     end
   end
-  object MainPages: TPageControl
-    Left = 0
-    Top = 65
-    Width = 769
-    Height = 564
-    ActivePage = ServicesPage
-    Align = alClient
-    TabOrder = 1
-    object ServicesPage: TTabSheet
-      Caption = 'Services'
-      object Splitter1: TSplitter
-        Left = 329
-        Top = 0
-        Height = 533
-        ExplicitLeft = 376
-        ExplicitTop = 304
-        ExplicitHeight = 100
-      end
-      object BusDataTree: TTreeView
-        Left = 0
-        Top = 0
-        Width = 329
-        Height = 533
-        Align = alLeft
-        Ctl3D = False
-        Indent = 19
-        ParentCtl3D = False
-        ReadOnly = True
-        SortType = stText
-        TabOrder = 0
-      end
-      object pnlInfoArea: TPanel
-        Left = 332
-        Top = 0
-        Width = 429
-        Height = 533
-        Align = alClient
-        BevelOuter = bvNone
-        BorderStyle = bsSingle
-        TabOrder = 1
-        object lblAddInfo: TLabel
-          AlignWithMargins = True
-          Left = 8
-          Top = 8
-          Width = 409
-          Height = 216
-          Margins.Left = 8
-          Margins.Top = 8
-          Margins.Right = 8
-          Margins.Bottom = 8
-          Align = alTop
-          Alignment = taCenter
-          Caption = 
-            'This panel might ordinarily expose data from the selected item. ' +
-            'Each node has a pointer to its Model data item in its Data field' +
-            ' and, while this would permit direct editing, it would be prefer' +
-            'able to lock this out and allow the controller to handle this by' +
-            ' passing the edited field plus the reference to the item being e' +
-            'dited to allow the controller to handle the editing.'
-          Font.Charset = ANSI_CHARSET
-          Font.Color = clWindowText
-          Font.Height = -21
-          Font.Name = 'Arial'
-          Font.Style = []
-          ParentFont = False
-          WordWrap = True
-          ExplicitLeft = 3
-          ExplicitTop = 3
-          ExplicitWidth = 415
-        end
-      end
-    end
-    object ErrorsPage: TTabSheet
-      Caption = 'Error Log'
-      ImageIndex = 1
-      object ErrorLog: TMemo
-        Left = 0
-        Top = 0
-        Width = 761
-        Height = 533
-        Align = alClient
-        ReadOnly = True
-        ScrollBars = ssBoth
-        TabOrder = 0
-      end
-    end
-  end
   object StatusBar1: TStatusBar
     Left = 0
     Top = 629
@@ -130,5 +43,94 @@ object frmMain: TfrmMain
       item
         Width = 200
       end>
+  end
+  object pnlMain: TPanel
+    Left = 0
+    Top = 65
+    Width = 769
+    Height = 564
+    Align = alClient
+    TabOrder = 2
+    ExplicitLeft = 280
+    ExplicitTop = 312
+    ExplicitWidth = 185
+    ExplicitHeight = 41
+    object Splitter1: TSplitter
+      Left = 329
+      Top = 1
+      Height = 562
+      ExplicitLeft = 241
+      ExplicitTop = 6
+    end
+    object pnlErrorLog: TPanel
+      Left = 332
+      Top = 1
+      Width = 436
+      Height = 562
+      Align = alClient
+      TabOrder = 0
+      ExplicitLeft = 488
+      ExplicitTop = 216
+      ExplicitWidth = 185
+      ExplicitHeight = 41
+      object lblErrorLog: TLabel
+        Left = 1
+        Top = 1
+        Width = 434
+        Height = 16
+        Align = alTop
+        Caption = 'Error Log'
+        ExplicitWidth = 53
+      end
+      object ErrorLog: TMemo
+        Left = 1
+        Top = 17
+        Width = 434
+        Height = 544
+        Align = alClient
+        ReadOnly = True
+        ScrollBars = ssBoth
+        TabOrder = 0
+        ExplicitLeft = 2
+        ExplicitTop = 2
+        ExplicitWidth = 433
+        ExplicitHeight = 560
+      end
+    end
+    object pnlTree: TPanel
+      Left = 1
+      Top = 1
+      Width = 328
+      Height = 562
+      Align = alLeft
+      TabOrder = 1
+      object lblBusServices: TLabel
+        Left = 1
+        Top = 1
+        Width = 326
+        Height = 16
+        Align = alTop
+        Caption = 'Bus Services'
+        ExplicitWidth = 76
+      end
+      object BusDataTree: TTreeView
+        Left = 1
+        Top = 17
+        Width = 326
+        Height = 544
+        Align = alClient
+        Ctl3D = False
+        Indent = 19
+        ParentCtl3D = False
+        ReadOnly = True
+        SortType = stText
+        TabOrder = 0
+        OnExpanding = BusDataTreeExpanding
+        ExplicitLeft = -144
+        ExplicitTop = 1
+        ExplicitWidth = 329
+        ExplicitHeight = 560
+      end
+    end
   end
 end
